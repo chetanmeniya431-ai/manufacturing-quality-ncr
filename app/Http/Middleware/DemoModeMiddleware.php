@@ -25,10 +25,18 @@ class DemoModeMiddleware
             return $next($request);
         }
 
-        if ($request->header('X-Livewire') || $request->ajax() || $request->wantsJson()) {
-            return response()->json(['message' => 'Demo mode: write actions are disabled.'], 403);
+        // For Livewire requests: never return 403 (Livewire renders the body as component HTML).
+        // The client-side fetch override (in the layout) intercepts writes before they reach here.
+        if ($request->header('X-Livewire')) {
+            // Always allow the DemoContactModal (users can submit the contact form)
+            if (str_contains($request->getContent(), 'demo-contact-modal')) {
+                return $next($request);
+            }
+            // Return a valid no-op: no component updates, page stays intact
+            return response()->json(['components' => [], 'assets' => []], 200);
         }
 
+        // Regular browser form POST: redirect back with a flash message
         return back()->with('demo_warning', 'This is a live demo. Write actions are disabled.');
     }
 }
