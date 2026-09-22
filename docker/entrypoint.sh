@@ -31,5 +31,6 @@ fi
 
 php artisan storage:link --force || true
 php artisan migrate --force
+php artisan db:seed --force
 
 exec "$@"
