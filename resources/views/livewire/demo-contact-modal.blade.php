@@ -1,5 +1,5 @@
 <div>
-    {{-- Modal overlay --}}
+    {{-- Modal overlay — triggered by JS interceptor or banner button --}}
     @if($open)
         <div class="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-gray-900/60">
             <div class="w-full max-w-lg rounded-xl bg-white shadow-2xl" wire:click.stop>
