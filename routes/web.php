@@ -16,6 +16,7 @@ use App\Livewire\Reports\AuditReport;
 use App\Livewire\Settings\UserManagement;
 use App\Livewire\Signals\SignalsDashboard;
 use App\Livewire\Suppliers\SupplierList;
+use App\Livewire\SuperAdmin\ContactRequests as SuperAdminContacts;
 use App\Livewire\Suppliers\SupplierShow;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -58,4 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/download', AuditReportController::class)->name('reports.download');
 
     Route::get('/settings', UserManagement::class)->name('settings');
+
+    Route::get('/super-admin/contacts', SuperAdminContacts::class)
+        ->name('super-admin.contacts')
+        ->middleware('role:Super Admin');
 });

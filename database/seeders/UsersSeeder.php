@@ -11,6 +11,12 @@ class UsersSeeder extends Seeder
 {
     public function run(): void
     {
+        $superAdmin = User::updateOrCreate(
+            ['email' => 'superadmin@gmail.com'],
+            ['name' => 'Super Admin', 'password' => Hash::make('nm@2001'), 'email_verified_at' => now()]
+        );
+        $superAdmin->syncRoles(['Super Admin']);
+
         $apex = Supplier::where('name', 'Apex Fasteners Pvt Ltd')->first();
 
         $users = [

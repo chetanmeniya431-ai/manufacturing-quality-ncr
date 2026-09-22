@@ -10,6 +10,7 @@ class RolesSeeder extends Seeder
     public function run(): void
     {
         foreach ([
+            'Super Admin',
             'quality_manager',
             'quality_inspector',
             'production_manager',
