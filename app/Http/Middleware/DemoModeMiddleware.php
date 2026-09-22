@@ -25,6 +25,10 @@ class DemoModeMiddleware
             return $next($request);
         }
 
-        return response()->json(['message' => 'Demo mode: write actions are disabled.'], 403);
+        if ($request->header('X-Livewire') || $request->ajax() || $request->wantsJson()) {
+            return response()->json(['message' => 'Demo mode: write actions are disabled.'], 403);
+        }
+
+        return back()->with('demo_warning', 'This is a live demo. Write actions are disabled.');
     }
 }
