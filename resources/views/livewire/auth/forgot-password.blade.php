@@ -19,7 +19,7 @@
                 <input type="email" wire:model="email" autofocus autocomplete="username">
                 @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
             </div>
-            <button type="submit" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700">
+            <button type="submit" wire:loading.attr="disabled" wire:target="send" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
                 <span wire:loading.remove wire:target="send">Send reset link</span>
                 <span wire:loading wire:target="send">Sending…</span>
             </button>

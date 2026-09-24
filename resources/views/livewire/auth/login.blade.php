@@ -13,8 +13,9 @@
         <div class="text-right">
             <a href="{{ route('password.request') }}" class="text-xs text-amber-600 hover:text-amber-700">Forgot password?</a>
         </div>
-        <button type="submit" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700">
-            Sign in
+        <button type="submit" wire:loading.attr="disabled" wire:target="login" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
+            <span wire:loading.remove wire:target="login">Sign in</span>
+            <span wire:loading wire:target="login">Signing in…</span>
         </button>
     </form>
 

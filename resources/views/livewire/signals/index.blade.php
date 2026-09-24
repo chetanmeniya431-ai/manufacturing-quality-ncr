@@ -34,8 +34,9 @@
                         @endif
                     </div>
                     @if(!$event->resolved_at && auth()->user()->canManageNcrs())
-                        <button wire:click="resolve({{ $event->id }})" class="text-xs font-medium text-amber-700 hover:underline shrink-0">
-                            Resolve
+                        <button wire:click="resolve({{ $event->id }})" wire:loading.attr="disabled" wire:target="resolve({{ $event->id }})" class="text-xs font-medium text-amber-700 hover:underline shrink-0 disabled:opacity-60">
+                            <span wire:loading.remove wire:target="resolve({{ $event->id }})">Resolve</span>
+                            <span wire:loading wire:target="resolve({{ $event->id }})">Resolving…</span>
                         </button>
                     @endif
                 </div>
@@ -54,8 +55,8 @@
                     <div class="px-5 py-3" wire:key="signal-{{ $signal->id }}">
                         <div class="flex items-center justify-between gap-2">
                             <p class="text-sm font-medium text-gray-900">{{ $signal->name }}</p>
-                            @if(auth()->user()->isQualityManager())
-                                <button wire:click="toggleSignal({{ $signal->id }})" class="text-xs {{ $signal->active ? 'text-green-700' : 'text-gray-400' }}">
+                            @if(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager())
+                                <button wire:click="toggleSignal({{ $signal->id }})" wire:loading.attr="disabled" wire:target="toggleSignal({{ $signal->id }})" class="text-xs disabled:opacity-60 {{ $signal->active ? 'text-green-700' : 'text-gray-400' }}">
                                     {{ $signal->active ? 'Active' : 'Inactive' }}
                                 </button>
                             @else
@@ -88,8 +89,9 @@
                                         @enderror
                                     @endforeach
                                     <div class="flex items-center gap-3 pt-1">
-                                        <button wire:click="saveSignal({{ $signal->id }})" class="text-xs font-medium text-amber-700 hover:underline">
-                                            Save
+                                        <button wire:click="saveSignal({{ $signal->id }})" wire:loading.attr="disabled" wire:target="saveSignal({{ $signal->id }})" class="text-xs font-medium text-amber-700 hover:underline disabled:opacity-60">
+                                            <span wire:loading.remove wire:target="saveSignal({{ $signal->id }})">Save</span>
+                                            <span wire:loading wire:target="saveSignal({{ $signal->id }})">Saving…</span>
                                         </button>
                                         <button wire:click="cancelEdit" class="text-xs text-gray-500 hover:underline">
                                             Cancel
@@ -101,8 +103,8 @@
                                     <p class="text-xs text-gray-400">
                                         {{ collect($fields)->map(fn($c, $f) => $c['label'].': '.$signal->$f.($c['unit'] ? ' '.$c['unit'] : ''))->implode(' · ') }}
                                     </p>
-                                    @if(auth()->user()->isQualityManager())
-                                        <button wire:click="editSignal({{ $signal->id }})" class="text-xs text-amber-700 hover:underline shrink-0">
+                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager())
+                                        <button wire:click="editSignal({{ $signal->id }})" wire:loading.attr="disabled" wire:target="editSignal({{ $signal->id }})" class="text-xs text-amber-700 hover:underline shrink-0 disabled:opacity-60">
                                             Edit
                                         </button>
                                     @endif

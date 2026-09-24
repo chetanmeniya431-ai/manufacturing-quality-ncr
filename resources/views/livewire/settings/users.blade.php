@@ -18,7 +18,7 @@
                         <td class="px-5 py-3 font-medium text-gray-900">{{ $user->name }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $user->email }}</td>
                         <td class="px-5 py-3">
-                            <select wire:change="updateRole({{ $user->id }}, $event.target.value)">
+                            <select wire:change="updateRole({{ $user->id }}, $event.target.value)" wire:loading.attr="disabled" wire:target="updateRole">
                                 @foreach(\App\Livewire\Settings\UserManagement::ROLES as $key => $label)
                                     <option value="{{ $key }}" @selected($currentRole === $key)>{{ $label }}</option>
                                 @endforeach
@@ -26,7 +26,7 @@
                         </td>
                         <td class="px-5 py-3">
                             @if($currentRole === 'supplier')
-                                <select wire:change="updateRole({{ $user->id }}, 'supplier', $event.target.value)">
+                                <select wire:change="updateRole({{ $user->id }}, 'supplier', $event.target.value)" wire:loading.attr="disabled" wire:target="updateRole">
                                     <option value="">Select supplier...</option>
                                     @foreach($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}" @selected($user->supplier_id === $supplier->id)>{{ $supplier->name }}</option>

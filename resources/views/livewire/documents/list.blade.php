@@ -75,7 +75,7 @@
                                         <x-icon name="arrow-path" class="w-4 h-4" />
                                     </button>
                                 @endif
-                                <button wire:click="delete({{ $document->id }})" wire:confirm="Delete this document and its chunks?" class="text-gray-400 hover:text-red-600" title="Delete">
+                                <button wire:click="delete({{ $document->id }})" wire:loading.attr="disabled" wire:target="delete({{ $document->id }})" wire:confirm="Delete this document and its chunks?" class="text-gray-400 hover:text-red-600" title="Delete">
                                     <x-icon name="trash" class="w-4 h-4" />
                                 </button>
                             @endif

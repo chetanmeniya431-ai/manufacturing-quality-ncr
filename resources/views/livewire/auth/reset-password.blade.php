@@ -18,7 +18,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
             <input type="password" wire:model="password_confirmation" autocomplete="new-password">
         </div>
-        <button type="submit" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700">
+        <button type="submit" wire:loading.attr="disabled" wire:target="resetPassword" class="w-full inline-flex justify-center items-center rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
             <span wire:loading.remove wire:target="resetPassword">Reset password</span>
             <span wire:loading wire:target="resetPassword">Resetting…</span>
         </button>

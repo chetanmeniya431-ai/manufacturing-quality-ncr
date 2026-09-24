@@ -4,7 +4,7 @@
         <div class="flex items-center justify-between mt-1 flex-wrap gap-2">
             <h1 class="text-xl font-semibold text-gray-900">{{ $supplier->name }}</h1>
             @if(auth()->user()->canManageNcrs())
-                <button wire:click="toggleApproved" class="text-xs font-medium text-gray-500 hover:text-gray-700 underline">
+                <button wire:click="toggleApproved" wire:loading.attr="disabled" wire:target="toggleApproved" class="text-xs font-medium text-gray-500 hover:text-gray-700 underline disabled:opacity-60">
                     {{ $supplier->approved ? 'Mark as not approved' : 'Mark as approved' }}
                 </button>
             @endif

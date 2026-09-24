@@ -61,8 +61,9 @@
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-semibold text-gray-900">Similar Past NCRs & AI Root Cause Suggestion</h2>
                     @if(in_array($ncr->ai_suggestion_status, ['none', 'failed']) && auth()->user()->canManageNcrs())
-                        <button wire:click="loadAiSuggestions" class="text-xs font-medium text-amber-700 hover:underline">
-                            {{ $ncr->ai_suggestion_status === 'failed' ? 'Retry' : 'Find similar NCRs' }}
+                        <button wire:click="loadAiSuggestions" wire:loading.attr="disabled" wire:target="loadAiSuggestions" class="text-xs font-medium text-amber-700 hover:underline disabled:opacity-60">
+                            <span wire:loading.remove wire:target="loadAiSuggestions">{{ $ncr->ai_suggestion_status === 'failed' ? 'Retry' : 'Find similar NCRs' }}</span>
+                            <span wire:loading wire:target="loadAiSuggestions">Starting…</span>
                         </button>
                     @endif
                 </div>
@@ -103,8 +104,9 @@
 
                 @if($ncr->status === 'open')
                     <p class="text-sm text-gray-500 mb-3">Start the investigation for this NCR.</p>
-                    <button wire:click="moveToInvestigating" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">
-                        Move to Under Investigation
+                    <button wire:click="moveToInvestigating" wire:loading.attr="disabled" wire:target="moveToInvestigating" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
+                        <span wire:loading.remove wire:target="moveToInvestigating">Move to Under Investigation</span>
+                        <span wire:loading wire:target="moveToInvestigating">Moving…</span>
                     </button>
                 @endif
 
@@ -137,16 +139,18 @@
                                 @error('corrective_action_due') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                             </div>
                         </div>
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">
-                            Assign Corrective Action
+                        <button type="submit" wire:loading.attr="disabled" wire:target="assignCorrectiveAction" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
+                            <span wire:loading.remove wire:target="assignCorrectiveAction">Assign Corrective Action</span>
+                            <span wire:loading wire:target="assignCorrectiveAction">Assigning…</span>
                         </button>
                     </form>
                 @endif
 
                 @if($ncr->status === 'corrective_assigned')
                     <p class="text-sm text-gray-500 mb-3">Once the corrective action has been implemented, move this NCR to verification.</p>
-                    <button wire:click="moveToVerification" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">
-                        Move to Verification
+                    <button wire:click="moveToVerification" wire:loading.attr="disabled" wire:target="moveToVerification" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
+                        <span wire:loading.remove wire:target="moveToVerification">Move to Verification</span>
+                        <span wire:loading wire:target="moveToVerification">Moving…</span>
                     </button>
                 @endif
 
@@ -168,8 +172,9 @@
                                 I confirm the corrective action was verified effective.
                             </label>
                             @error('verification_confirmed') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
-                            <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">
-                                Close NCR
+                            <button type="submit" wire:loading.attr="disabled" wire:target="closeNcr" class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-60">
+                                <span wire:loading.remove wire:target="closeNcr">Close NCR</span>
+                                <span wire:loading wire:target="closeNcr">Closing…</span>
                             </button>
                         @else
                             <p class="text-xs text-gray-400">Only a Quality Manager can close this NCR.</p>
