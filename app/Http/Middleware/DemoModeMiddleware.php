@@ -25,15 +25,10 @@ class DemoModeMiddleware
             return $next($request);
         }
 
-        // For Livewire requests: never return 403 (Livewire renders the body as component HTML).
-        // The client-side fetch override (in the layout) intercepts writes before they reach here.
+        // Livewire requests: let through — client-side fetch override is the gate.
+        // Never return 403 to Livewire; it renders the JSON body as component HTML.
         if ($request->header('X-Livewire')) {
-            // Always allow the DemoContactModal (users can submit the contact form)
-            if (str_contains($request->getContent(), 'demo-contact-modal')) {
-                return $next($request);
-            }
-            // Return a valid no-op: no component updates, page stays intact
-            return response()->json(['components' => [], 'assets' => []], 200);
+            return $next($request);
         }
 
         // Regular browser form POST: redirect back with a flash message
