@@ -5,11 +5,22 @@ namespace App\Services\Documents;
 use App\Models\DocumentChunk;
 use App\Services\Ollama\OllamaClient;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Pgvector\Laravel\Distance;
 use Pgvector\Laravel\Vector;
 
 class QualityAssistantService
 {
+    /**
+     * Per-chunk context cap, in characters. This CPU-only Ollama deployment
+     * processes prompts at roughly 9 tokens/sec, so an uncapped 500-word
+     * chunk (~3000 chars, ~700 tokens) times TOP_K_CHUNKS can push the
+     * prompt past OLLAMA_TIMEOUT before generation even starts. Truncating
+     * each chunk keeps worst-case prompt size bounded regardless of how
+     * CHUNK_SIZE is configured.
+     */
+    protected const MAX_CONTEXT_CHARS_PER_CHUNK = 600;
+
     public function __construct(protected OllamaClient $ollama)
     {
     }
@@ -58,8 +69,9 @@ class QualityAssistantService
             $doc = $chunk->document;
             $n = $i + 1;
             $page = $chunk->page_estimate ? ", page ~{$chunk->page_estimate}" : '';
+            $text = Str::limit($chunk->chunk_text, self::MAX_CONTEXT_CHARS_PER_CHUNK, '…');
 
-            return "[Source {$n}: {$doc?->name}{$page}]\n{$chunk->chunk_text}";
+            return "[Source {$n}: {$doc?->name}{$page}]\n{$text}";
         })->implode("\n\n---\n\n");
 
         $system = <<<PROMPT
