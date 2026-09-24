@@ -21,7 +21,7 @@ services:
       SESSION_DRIVER: database
       CACHE_STORE: database
       FILESYSTEM_DISK: local
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
       OLLAMA_GENERATION_MODEL: ${OLLAMA_GENERATION_MODEL:-llama3.2:3b}
       OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
       EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
@@ -34,8 +34,9 @@ services:
       EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE:-10}
     volumes:
       - app_storage:/var/www/html/storage/app
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - default
+      - nirmantra_shared
     depends_on:
       db:
         condition: service_healthy
@@ -61,3 +62,7 @@ services:
 volumes:
   pg_data:
   app_storage:
+
+networks:
+  nirmantra_shared:
+    external: true
