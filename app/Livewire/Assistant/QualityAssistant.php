@@ -32,6 +32,20 @@ class QualityAssistant extends Component
         AnswerAssistantQuestionJob::dispatch($answer->id);
     }
 
+    /**
+     * For a question stuck pending far longer than normal (see
+     * AssistantAnswer::isStale()) — re-dispatch rather than leave the user
+     * with no way out besides refreshing and hoping.
+     */
+    public function retry(int $answerId): void
+    {
+        $answer = AssistantAnswer::where('user_id', auth()->id())->findOrFail($answerId);
+
+        $answer->update(['status' => 'pending']);
+
+        AnswerAssistantQuestionJob::dispatch($answer->id);
+    }
+
     public function render()
     {
         $conversation = AssistantAnswer::where('user_id', auth()->id())

@@ -11,10 +11,22 @@
             </div>
             <div class="flex justify-start">
                 <div class="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-4 py-3 max-w-lg text-sm text-gray-800">
-                    @if($turn->status === 'pending')
+                    @if($turn->status === 'pending' && $turn->isStale())
+                        <p class="text-amber-600">This is taking much longer than usual — something may be wrong.</p>
+                        <button wire:click="retry({{ $turn->id }})" wire:loading.attr="disabled" wire:target="retry({{ $turn->id }})"
+                                class="mt-2 rounded-md border border-amber-300 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-50 disabled:opacity-50">
+                            <span wire:loading.remove wire:target="retry({{ $turn->id }})">Retry</span>
+                            <span wire:loading wire:target="retry({{ $turn->id }})">Retrying…</span>
+                        </button>
+                    @elseif($turn->status === 'pending')
                         <p class="text-gray-400">Thinking... this can take a couple of minutes.</p>
                     @elseif($turn->status === 'failed')
-                        <p class="text-red-600">The AI assistant is temporarily unavailable. Please try again shortly.</p>
+                        <p class="text-red-600">The AI assistant is temporarily unavailable.</p>
+                        <button wire:click="retry({{ $turn->id }})" wire:loading.attr="disabled" wire:target="retry({{ $turn->id }})"
+                                class="mt-2 rounded-md border border-red-300 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50">
+                            <span wire:loading.remove wire:target="retry({{ $turn->id }})">Retry</span>
+                            <span wire:loading wire:target="retry({{ $turn->id }})">Retrying…</span>
+                        </button>
                     @else
                         <p class="whitespace-pre-line">{{ $turn->answer }}</p>
                         @if(count($turn->sources ?? []))
