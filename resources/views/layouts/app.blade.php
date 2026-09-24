@@ -36,7 +36,7 @@
         <aside
             x-cloak
             :class="mobileNavOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-            class="fixed lg:static z-30 left-0 h-full w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-200 pt-16 lg:pt-0"
+            class="fixed lg:sticky z-30 left-0 h-full max-h-screen w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-200 pt-16 lg:pt-0"
             style="{{ $isDemo ? 'top: 40px' : 'top: 0' }}"
         >
             <div class="hidden lg:flex items-center gap-2 px-6 h-16 border-b border-gray-200">
