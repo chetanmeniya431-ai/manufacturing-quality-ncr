@@ -68,6 +68,12 @@ class OllamaClient
             'model' => $this->generationModel,
             'messages' => $messages,
             'stream' => false,
+            // CPU inference time scales with output length — every token is a
+            // full forward pass. Capping this keeps worst-case response time
+            // bounded on modest hardware instead of letting the model ramble
+            // for minutes on a verbose answer. ~400 tokens is generous for
+            // "concise and practical" per the system prompt already in use.
+            'options' => ['num_predict' => 400],
         ]);
 
         $content = $response['message']['content'] ?? null;
