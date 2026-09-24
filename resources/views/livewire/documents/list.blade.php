@@ -68,9 +68,14 @@
                         </td>
                         <td class="px-5 py-3 text-gray-500">{{ $document->chunk_count }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $document->createdBy->name }}</td>
-                        <td class="px-5 py-3 text-right">
+                        <td class="px-5 py-3 text-right whitespace-nowrap">
                             @if(auth()->user()->canManageNcrs())
-                                <button wire:click="delete({{ $document->id }})" wire:confirm="Delete this document and its chunks?" class="text-gray-400 hover:text-red-600">
+                                @if($document->status === 'failed')
+                                    <button wire:click="retry({{ $document->id }})" wire:loading.attr="disabled" wire:target="retry({{ $document->id }})" class="text-gray-400 hover:text-amber-600 mr-2" title="Retry">
+                                        <x-icon name="arrow-path" class="w-4 h-4" />
+                                    </button>
+                                @endif
+                                <button wire:click="delete({{ $document->id }})" wire:confirm="Delete this document and its chunks?" class="text-gray-400 hover:text-red-600" title="Delete">
                                     <x-icon name="trash" class="w-4 h-4" />
                                 </button>
                             @endif

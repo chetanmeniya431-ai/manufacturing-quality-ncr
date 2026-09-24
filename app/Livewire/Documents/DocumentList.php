@@ -61,6 +61,16 @@ class DocumentList extends Component
         $document->delete();
     }
 
+    public function retry(int $documentId): void
+    {
+        abort_unless(auth()->user()->canManageNcrs(), 403);
+
+        $document = QualityDocument::findOrFail($documentId);
+        ProcessQualityDocumentJob::dispatch($document->id);
+
+        session()->flash('status', "Retrying \"{$document->name}\".");
+    }
+
     public function render()
     {
         return view('livewire.documents.list', [
