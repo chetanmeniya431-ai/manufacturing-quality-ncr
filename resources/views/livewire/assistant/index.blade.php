@@ -39,9 +39,13 @@
 
     <div class="sticky bottom-0 bg-gray-50 pt-3 pb-6">
         <form wire:submit="ask" class="flex items-center gap-2">
-            <input type="text" wire:model="question" placeholder="Ask a question about your quality documents..." class="flex-1">
-            <button type="submit" class="shrink-0 inline-flex items-center justify-center rounded-lg bg-amber-600 w-11 h-11 text-white hover:bg-amber-700" wire:loading.attr="disabled" wire:target="ask">
-                <x-icon name="send" class="w-5 h-5" />
+            <input type="text" wire:model="question" placeholder="Ask a question about your quality documents..." class="flex-1" wire:loading.attr="disabled" wire:target="ask">
+            <button type="submit" class="shrink-0 inline-flex items-center justify-center rounded-lg bg-amber-600 w-11 h-11 text-white hover:bg-amber-700 disabled:opacity-50" wire:loading.attr="disabled" wire:target="ask">
+                <x-icon name="send" class="w-5 h-5" wire:loading.remove wire:target="ask" />
+                <svg wire:loading wire:target="ask" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
             </button>
         </form>
         @error('question') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
