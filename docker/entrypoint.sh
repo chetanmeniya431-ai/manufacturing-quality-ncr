@@ -17,6 +17,8 @@ mkdir -p storage/framework/sessions storage/framework/views storage/framework/ca
 mkdir -p storage/logs
 mkdir -p storage/app/private/quality-documents
 mkdir -p storage/app/private/ncr-attachments
+mkdir -p storage/fonts
+mkdir -p storage/framework/cache/laravel-excel
 chown -R www-data:www-data storage bootstrap/cache
 
 if [ -z "${APP_KEY}" ]; then
