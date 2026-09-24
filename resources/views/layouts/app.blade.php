@@ -17,7 +17,7 @@
         </svg>
         <span>You are viewing a <strong>live demo</strong>. Actions that add or change data are disabled.</span>
     </div>
-    <button onclick="if(window.Livewire)Livewire.dispatch('show-demo-modal')" class="shrink-0 rounded-md bg-white/20 hover:bg-white/30 px-3 py-1 text-xs font-semibold transition-colors">
+    <button type="button" x-data x-on:click="Livewire.dispatch('show-demo-modal')" class="shrink-0 rounded-md bg-white/20 hover:bg-white/30 px-3 py-1 text-xs font-semibold transition-colors">
         Get your own system →
     </button>
 </div>
@@ -68,7 +68,7 @@
                     <x-icon name="chart-bar" class="w-5 h-5" /> Reports
                 </a>
                 @endif
-                @if(auth()->user()->isQualityManager())
+                @if(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager())
                 <a href="{{ route('settings') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('settings') ? 'bg-amber-50 text-amber-700' : 'text-gray-700 hover:bg-gray-100' }}">
                     <x-icon name="cog" class="w-5 h-5" /> Settings
                 </a>
@@ -133,7 +133,7 @@
 @livewireScripts
 
 @if($isDemo)
-<script>
+<script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">
 (function () {
     /* ================================================================
      * DEMO MODE GUARD v2 — fetch interception
@@ -168,8 +168,10 @@
     var _fetch = window.fetch;
     window.fetch = function (url, opts) {
         var urlStr = typeof url === 'string' ? url : (url && url.href ? url.href : String(url));
-        var isLwUpdate = opts && opts.method === 'POST' && urlStr.indexOf('livewire/update') !== -1;
-        var isLwUpload = opts && opts.method === 'POST' && urlStr.indexOf('livewire/upload') !== -1;
+        // Livewire 4 serves its endpoints under /livewire-{hash}/ (hash derived from APP_KEY)
+        var isPost = opts && String(opts.method).toUpperCase() === 'POST';
+        var isLwUpdate = isPost && /\/livewire(-[a-f0-9]+)?\/update(\?|$)/.test(urlStr);
+        var isLwUpload = isPost && /\/livewire(-[a-f0-9]+)?\/upload-file(\?|$)/.test(urlStr);
 
         if (!isLwUpdate && !isLwUpload) return _fetch.apply(this, arguments);
 

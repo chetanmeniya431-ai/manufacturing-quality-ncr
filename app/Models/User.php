@@ -48,18 +48,25 @@ class User extends Authenticatable
         return $this->hasRole('auditor');
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('Super Admin');
+    }
+
     /**
      * Quality Manager and Quality Inspector can both create/investigate NCRs;
      * only Quality Manager can close them or manage signals/settings.
+     * Super Admin can do everything — it's the account used to fix/manage
+     * demo content directly (bypasses the live-demo write restriction too).
      */
     public function canManageNcrs(): bool
     {
-        return $this->isQualityManager() || $this->isQualityInspector();
+        return $this->isSuperAdmin() || $this->isQualityManager() || $this->isQualityInspector();
     }
 
     public function canCloseNcrs(): bool
     {
-        return $this->isQualityManager();
+        return $this->isSuperAdmin() || $this->isQualityManager();
     }
 
     public function isReadOnly(): bool

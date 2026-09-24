@@ -33,7 +33,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($ncrs as $ncr)
-                        <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='{{ route('ncrs.show', $ncr) }}'">
+                        <tr class="hover:bg-gray-50 cursor-pointer" x-data x-on:click="window.location = '{{ route('ncrs.show', $ncr) }}'">
                             <td class="px-5 py-3 font-medium text-amber-700">{{ $ncr->ncr_number }}</td>
                             <td class="px-5 py-3 text-gray-700">{{ $ncr->product_name }}</td>
                             <td class="px-5 py-3"><x-badge :color="$ncr->severityBadgeColor()">{{ \App\Models\Ncr::SEVERITY_LABELS[$ncr->severity] }}</x-badge></td>

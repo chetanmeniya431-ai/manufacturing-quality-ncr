@@ -20,12 +20,12 @@ class UserManagement extends Component
 
     public function mount(): void
     {
-        abort_unless(auth()->user()->isQualityManager(), 403);
+        abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager(), 403);
     }
 
     public function updateRole(int $userId, string $role, ?int $supplierId = null): void
     {
-        abort_unless(auth()->user()->isQualityManager(), 403);
+        abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager(), 403);
 
         if (! array_key_exists($role, self::ROLES)) {
             return;

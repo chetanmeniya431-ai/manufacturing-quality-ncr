@@ -35,7 +35,7 @@ class SignalsDashboard extends Component
 
     public function toggleSignal(int $signalId): void
     {
-        abort_unless(auth()->user()->isQualityManager(), 403);
+        abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager(), 403);
 
         $signal = Signal::findOrFail($signalId);
         $signal->update(['active' => ! $signal->active]);
@@ -43,7 +43,7 @@ class SignalsDashboard extends Component
 
     public function editSignal(int $signalId): void
     {
-        abort_unless(auth()->user()->isQualityManager(), 403);
+        abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager(), 403);
 
         $signal = Signal::findOrFail($signalId);
         $this->editingSignalId = $signalId;
@@ -61,7 +61,7 @@ class SignalsDashboard extends Component
 
     public function saveSignal(int $signalId): void
     {
-        abort_unless(auth()->user()->isQualityManager(), 403);
+        abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isQualityManager(), 403);
 
         $signal = Signal::findOrFail($signalId);
         $fields = $signal->configurableFields();
