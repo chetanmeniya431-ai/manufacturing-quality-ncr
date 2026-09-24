@@ -35,6 +35,7 @@
     @endif
 
     <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
         <table class="min-w-full text-sm">
             <thead>
                 <tr class="text-left text-xs text-gray-500 uppercase border-b border-gray-100 bg-gray-50">
@@ -62,7 +63,7 @@
                             @endphp
                             <x-badge :color="$statusColor">{{ ucfirst($document->status) }}</x-badge>
                             @if($document->status === 'failed' && $document->error_message)
-                                <p class="text-xs text-red-500 mt-1">{{ $document->error_message }}</p>
+                                <p class="text-xs text-red-500 mt-1 max-w-sm break-words">{{ $document->error_message }}</p>
                             @endif
                         </td>
                         <td class="px-5 py-3 text-gray-500">{{ $document->chunk_count }}</td>
@@ -80,5 +81,6 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
 </div>
