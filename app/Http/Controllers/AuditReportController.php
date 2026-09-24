@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\Reports\AuditReportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class AuditReportController extends Controller
 {
@@ -23,7 +25,22 @@ class AuditReportController extends Controller
             $to = now()->endOfDay();
         }
 
-        $pdf = $service->build($from, $to);
+        try {
+            $pdf = $service->build($from, $to);
+        } catch (Throwable $e) {
+            // The dompdf render can fail for reasons that don't show up anywhere
+            // else (large/odd data, memory) — log it explicitly so a failure is
+            // never silent, then show a page instead of a raw 500.
+            Log::error('Audit report generation failed', [
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'from'    => $from->toDateString(),
+                'to'      => $to->toDateString(),
+            ]);
+
+            return back()->with('error', 'The report could not be generated. This has been logged — please try a shorter date range or contact support.');
+        }
 
         return $pdf->download('audit-report-'.now()->format('Y-m-d').'.pdf');
     }

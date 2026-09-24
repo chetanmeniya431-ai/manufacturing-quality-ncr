@@ -118,8 +118,8 @@
         <tr><th>Signal</th><th>Severity</th><th>Related to</th><th>Triggered</th></tr>
         @foreach($openSignalEvents as $event)
         <tr>
-            <td>{{ $event->signal->name }}</td>
-            <td>{{ ucfirst($event->signal->severity) }}</td>
+            <td>{{ $event->signal->name ?? '—' }}</td>
+            <td>{{ $event->signal?->severity ? ucfirst($event->signal->severity) : '—' }}</td>
             <td>{{ $event->ncr?->ncr_number ?? $event->supplier?->name ?? ($event->context ? json_encode($event->context) : '—') }}</td>
             <td>{{ $event->triggered_at->format('d M Y') }}</td>
         </tr>
