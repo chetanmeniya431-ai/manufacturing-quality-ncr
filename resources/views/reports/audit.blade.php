@@ -67,7 +67,10 @@
         </tr>
     </table>
 
-    <h2>NCR List ({{ $ncrs->count() }})</h2>
+    <h2>NCR List ({{ $ncrs->count() }}{{ $ncrTotal > $ncrs->count() ? ' of '.$ncrTotal : '' }})</h2>
+    @if($ncrTotal > $ncrs->count())
+        <p class="sub">Showing the {{ $ncrs->count() }} earliest of {{ $ncrTotal }} NCRs in this period. Narrow the date range for a complete list.</p>
+    @endif
     <table>
         <tr>
             <th>NCR #</th><th>Product</th><th>Category</th><th>Severity</th><th>Status</th>
@@ -113,7 +116,10 @@
         @endforeach
     </table>
 
-    <h2>Open Signal Events ({{ $openSignalEvents->count() }})</h2>
+    <h2>Open Signal Events ({{ $openSignalEvents->count() }}{{ $signalEventTotal > $openSignalEvents->count() ? ' of '.$signalEventTotal : '' }})</h2>
+    @if($signalEventTotal > $openSignalEvents->count())
+        <p class="sub">Showing the {{ $openSignalEvents->count() }} most recent of {{ $signalEventTotal }} open signal events.</p>
+    @endif
     <table>
         <tr><th>Signal</th><th>Severity</th><th>Related to</th><th>Triggered</th></tr>
         @foreach($openSignalEvents as $event)
@@ -126,7 +132,10 @@
         @endforeach
     </table>
 
-    <h2>Quality Documents on File</h2>
+    <h2>Quality Documents on File ({{ $documents->count() }}{{ $documentTotal > $documents->count() ? ' of '.$documentTotal : '' }})</h2>
+    @if($documentTotal > $documents->count())
+        <p class="sub">Showing {{ $documents->count() }} of {{ $documentTotal }} documents.</p>
+    @endif
     <table>
         <tr><th>Name</th><th>Type</th><th>Status</th><th>Uploaded</th></tr>
         @foreach($documents as $document)
